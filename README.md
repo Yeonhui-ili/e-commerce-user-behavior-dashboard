@@ -59,7 +59,6 @@ This section provides insights into the operating systems and browsers used by v
 - **Browser Distribution**: Pie chart showing the distribution of browsers used by visitors, identifying the most common browsers.
 
 ![system_img](./system_img.jpg)
-![system_img1](./system_img1.jpg)
 
 
 This project aims to offer a comprehensive analysis of website traffic, user engagement, and system usage through an intuitive dashboard interface. By providing detailed insights into these key metrics, the goal is to empower website operators to gain a deeper understanding of user behavior and optimize website performance effectively.
