@@ -7,7 +7,9 @@ import folium
 
 FILE_NAME = 'online_shoppers_intention.csv'
 
+# os 사용 비율을 나타내는 파이 그래프
 def operating_systems_data():
+    # csv 파일에서 데이터프레임 가져옴
     df_all = pd.read_csv(FILE_NAME)
     df_all = df_all[['OperatingSystems']]
     
@@ -28,6 +30,8 @@ def operating_systems_data():
     8: 'SunOS'
     }
     df['os'] = df['os'].map(os_mapping)
+
+    # 파이 그래프 생성
     fig = px.pie(df, names='os', values='count', title='Percentage of Diffrent OS Used by visitors')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
@@ -36,12 +40,16 @@ def operating_systems_data():
                       marker_colors=px.colors.cyclical.Twilight)
     return fig
 
+# 브라우저 사용 비율을 나타내는 파이 그래프
 def browser_data():
+    # csv 파일에서 데이터프레임 가져옴
     df_all = pd.read_csv(FILE_NAME)
     df_all = df_all[['Browser']]
+
     # 'Browser' 칼럼의 값에 따라 각 운영 체제(OS)별로 개수를 계산하여 새로운 데이터프레임 생성
     df = df_all['Browser'].value_counts().reset_index()
     df.columns = ['Browser', 'count']
+
     # 각 Browser에 새로운 임의의 이름 부여
     browser_mapping = {
     1: 'Safari',
@@ -59,6 +67,8 @@ def browser_data():
     13: 'UC Browser'
     }
     df['Browser'] = df['Browser'].map(browser_mapping)
+
+    # 파이 그래프 생성
     fig = px.pie(df, names='Browser', values='count', title='Percentage of Diffrent Browsers Used by visitors')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
@@ -67,9 +77,10 @@ def browser_data():
                       marker_colors=px.colors.cyclical.Twilight)
     return fig
 
+# 트래픽 발생 지역의 비율을 나타내는 파이 그래프
 def region_data():
+    # csv 파일에서 데이터프레임 가져옴
     df_all = pd.read_csv(FILE_NAME)
-
     df_all = df_all[['Region']]
 
     # 'Region' 칼럼의 값에 따라 각 지역별로 개수를 계산하여 새로운 데이터프레임 생성
@@ -90,7 +101,7 @@ def region_data():
     }
     df['Region'] = df['Region'].map(region_mapping)
     
-    
+    # 파이 그래프 생성
     fig = px.pie(df, names='Region', values='count', title='Percentage of Diffrent Regions visitors')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
@@ -99,7 +110,9 @@ def region_data():
                       marker_colors=px.colors.cyclical.Twilight)
     return fig
 
+# 트래픽 발생지역과 수를 보여주는 지도
 def region_map_data():
+    # csv 파일에서 데이터프레임 가져옴
     df_all = pd.read_csv(FILE_NAME)
     df_all = df_all[['Region']]
 
@@ -107,7 +120,7 @@ def region_map_data():
     df = df_all['Region'].value_counts().reset_index()
     df.columns = ['Region', 'count']
 
-    # 'Region' 열을 기준으로 오름차순으로 정렬
+    # 위치 정보와 순서를 맞추기위해 'Region' 열을 기준으로 오름차순으로 정렬
     df_sorted = df.sort_values(by='Region')
     
     # 각 Region에 새로운 임의의 이름 부여
@@ -137,10 +150,9 @@ def region_map_data():
         location=[map_data['lat'].mean(), map_data['lon'].mean()], 
         zoom_start=1)
         
-
     # 지도에 원형 마커와 값 추가
     for index, row in map_data.iterrows():
-        # 원 표시
+        # 원형 마커 표시
         folium.CircleMarker(                     
             location=[row['lat'], row['lon']],   
             radius=row['value'] / 100,            
@@ -158,10 +170,10 @@ def region_map_data():
 
     return traffic_map
 
-# 각 traffic_type의 수가 month별로 어떻게 변하는지 보여주는 line 그래프 생성
+# 각 트래픽 타입의 수가 월별로 어떻게 변하는지 보여주는 다중 라인 그래프
 def traffic_type_data():
+    # csv 파일에서 데이터프레임 가져옴
     df_all = pd.read_csv(FILE_NAME)
-
     # 방문한 월, 트래픽 타입 추출
     df = df_all[['Month', 'TrafficType']]
 
@@ -179,7 +191,7 @@ def traffic_type_data():
     index = pd.MultiIndex.from_product([months, traffic_types], names=['Month', 'TrafficType'])
     template_df = pd.DataFrame(index=index).reset_index()
 
-    # 빈 count 값 0으로 채워서 명시적으로 모든 경우에 대한 count 값 입력
+    # 빈 count 값 0으로 채워서, 명시적으로 모든 경우에 대한 count 값 입력
     result_df = pd.merge(template_df, df_grouped, how='left', on=['Month', 'TrafficType']).fillna(0)
 
     # 각 월별로 방문자 타입의 비율 계산
@@ -232,7 +244,7 @@ def traffic_type_data():
                   custom_data='Percentage',
                   category_orders={'TrafficType': sorted_traffic_types}                  
                   )
-
+    # 수직선 호버 생성
     fig.update_layout(hovermode="x unified")
 
     fig.update_traces(hovertemplate='<br>%{y}회(%{customdata[0]:.3}%)'
@@ -246,13 +258,10 @@ def traffic_type_data():
             top += 1
         else:
             trace.visible = 'legendonly' 
-    
-    # # 그룹 바 그래프 생성
-    # fig = px.bar(top3_df_grouped, x='Month', y='Count', color='TrafficType', text='Percentage', custom_data='Total' ,title='Monthly Visits by Visitor\'s Type',
-    #              labels={'Count': 'Number of Visits'}, category_orders={'Month': month_order}, text_auto=True, barmode='stack')
 
     return fig, sorted_traffic_types[:3]
 
+# 월별 방문자 타입의 비율과 수를 보여주는 막대 그래프
 def visitor_type_data():
     df = pd.read_csv(FILE_NAME)
 
@@ -281,8 +290,10 @@ def visitor_type_data():
                       hovertemplate='Total visitors in %{x} : %{customdata[0]}회<br>%{customdata[1]} in %{x} : %{y}회(%{text:.4}%)'
                       )
     fig.update_layout(hoverlabel=dict(align='left'))
+
     return fig
 
+# 페이지 별 방문수와 사용자들의 평균적인 페이지 별 체류 시간
 def session_data():
     df = pd.read_csv(FILE_NAME)
 
@@ -302,21 +313,3 @@ def session_data():
     prod_average_duration = prod_df['ProductRelated_Duration'].mean()
 
     return admin_count, info_count, prod_count, admin_average_duration, info_average_duration, prod_average_duration
-
-
-
-df = pd.read_csv(FILE_NAME)
-
-# 각 페이지별로 데이터프레임 분할
-admin_df = df[['Administrative', 'Administrative_Duration']]
-info_df = df[['Informational', 'Informational_Duration']]
-prod_df = df[['ProductRelated', 'ProductRelated_Duration']]
-
-# 각 페이지별 방문수 계산
-admin_count = admin_df['Administrative'].sum()
-admin_average_duration = admin_df['Administrative_Duration'].mean()
-print(type(admin_count))
-display(admin_count)
-
-print(type(admin_average_duration))
-display(admin_average_duration)
