@@ -117,25 +117,25 @@ def traffic_map():
 def engagement_session_admin():
     st.subheader("Administrative Page")
     st.markdown("The number of visits to the administrative page during a specified period and the average time a user spends on the page within a single session")
-    admin_count, info_count, prod_count, admin_average_duration, info_average_duration, prod_average_duration = gp.session_data()
-    st.success(f"Visit Count: {admin_count}")
-    st.success(f"Average Duration: {admin_average_duration:.3}")
+    admin = gp.session_data()
+    st.success(f"Visit Count: {admin[0]}")
+    st.success(f"Average Duration: {admin[3]:.3}")
 
 # Informational Page 방문 수, 평균 방문 시간
 def engagement_session_info():
     st.subheader("Informational Page")
     st.markdown("The number of visits to the informational page during a specified period and the average time a user spends on the page within a single session")
-    admin_count, info_count, prod_count, admin_average_duration, info_average_duration, prod_average_duration = gp.session_data()
-    st.success(f"Visit Count: {info_count}")
-    st.success(f"Average Duration: {info_average_duration:.3}")
+    info = gp.session_data()
+    st.success(f"Visit Count: {info[1]}")
+    st.success(f"Average Duration: {info[4]:.3}")
 
 # ProductRelated Page 방문 수, 평균 방문 시간
 def engagement_session_prod():
     st.subheader("ProductRelated Page")
     st.markdown("The number of visits to the product related page during a specified period and the average time a user spends on the page within a single session")
-    admin_count, info_count, prod_count, admin_average_duration, info_average_duration, prod_average_duration = gp.session_data()
-    st.success(f"Visit Count: {prod_count}")
-    st.success(f"Average Duration: {prod_average_duration:.5}")
+    prod = gp.session_data()
+    st.success(f"Visit Count: {prod[2]}")
+    st.success(f"Average Duration: {prod[5]:.5}")
 
 # 월별 방문자 타입 스택 차트
 def engagement_visitor():
