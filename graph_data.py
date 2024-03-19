@@ -32,7 +32,7 @@ def operating_systems_data():
     df['os'] = df['os'].map(os_mapping)
 
     # 파이 그래프 생성
-    fig = px.pie(df, names='os', values='count', title='Percentage of Diffrent OS Used by visitors')
+    fig = px.pie(df, names='os', values='count', title='Operating System Distribution Among Users')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
                       hovertemplate='%{label} : %{percent} (%{value}회)',
@@ -69,7 +69,7 @@ def browser_data():
     df['Browser'] = df['Browser'].map(browser_mapping)
 
     # 파이 그래프 생성
-    fig = px.pie(df, names='Browser', values='count', title='Percentage of Diffrent Browsers Used by visitors')
+    fig = px.pie(df, names='Browser', values='count', title='Browser Usage Distribution Among Users')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
                       hovertemplate='%{label} : %{percent} (%{value}회)',
@@ -102,7 +102,7 @@ def region_data():
     df['Region'] = df['Region'].map(region_mapping)
     
     # 파이 그래프 생성
-    fig = px.pie(df, names='Region', values='count', title='Percentage of Diffrent Regions visitors')
+    fig = px.pie(df, names='Region', values='count', title='Region-wise Traffic Distribution')
     fig.update_traces(textposition='inside', 
                       textinfo='percent+label',
                       hovertemplate='%{label} : %{percent} (%{value}회)',
